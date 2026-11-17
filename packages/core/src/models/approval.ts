@@ -79,6 +79,14 @@ export interface SigningApprovalPreview {
   /** Set for a wallet `transfer` that sends this collectible, or a `transferAoTokens` call that moves it; `amount` is then 0 AR for a wallet send, and 1 for a token transfer. */
   collectible?: CollectibleRef | null;
   /**
+   * The `last_tx` a site supplied for a `sign`/`dispatch` transaction,
+   * which the signed bytes commit to; `null` when the site supplied none
+   * (the transaction builder then fetches the chain's current one after
+   * approval). Shown so a stale or arbitrary value the site picked is
+   * visible before signing.
+   */
+  lastTx?: string | null;
+  /**
    * Set when a transaction looks like a token transfer (`ao/l1-transfer.ts`)
    * that can't be read cleanly, so it shows as the plain transaction with a
    * warning to check its tags.
@@ -102,6 +110,13 @@ export interface SigningApprovalPreview {
     dataTruncated?: true;
     tags: Array<{ name: string; value: string }>;
     target: string | null;
+    /**
+     * The item's `anchor`, which the signed bytes commit to (it feeds the
+     * ANS-104 deep hash and the background verifies it when matching the
+     * prepared payload); `null` when the item carries none. Shown in
+     * shortened form, like the target, since a site can set it freely.
+     */
+    anchor?: string | null;
     payloadHash: string;
     /** Set when the item is an AO `Transfer` message, read from its own target and tags. */
     transfer: DataItemTransferPreview | null;
