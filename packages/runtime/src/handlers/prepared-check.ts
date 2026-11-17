@@ -85,7 +85,7 @@ export function summarize(payload: UnsignedPayload, collectibleId?: string | nul
     };
   }
   const { target, tags, data } = readDataItemFields(payload.raw);
-  const transfer = readAoTransferMessage({ target, tags });
+  const transfer = readAoTransferMessage({ target, tags, dataSize: data.byteLength });
   if (transfer?.kind === "transfer") {
     if (transfer.quantity === COLLECTIBLE_TRANSFER_QUANTITY && transfer.processId === collectibleId) {
       return { kind: "collectibleTransfer", asset: transfer.processId, recipient: transfer.recipient, fee: "0" };
