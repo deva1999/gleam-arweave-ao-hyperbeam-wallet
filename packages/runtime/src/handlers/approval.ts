@@ -872,6 +872,8 @@ async function buildSigningPreview(input: SigningRequestInput): Promise<SigningA
     token: input.token ?? null,
     tokenDenomination: input.tokenDenomination ?? null,
     tokenTicker: input.tokenTicker ?? null,
+    hashAlgorithm: input.hashAlgorithm ?? null,
+    encryptLabelSize: input.encryptAlgorithm?.label?.byteLength ?? null,
     ...(input.collectible ? { collectible: input.collectible } : {}),
     ...(input.unreadableTokenTransfer ? { unreadableTokenTransfer: true } : {}),
     ...dataPreview(input.payload),
