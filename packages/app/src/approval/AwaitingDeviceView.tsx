@@ -226,7 +226,10 @@ function SummaryRows({ summary, token }: { summary: DeviceSigningSummary; token:
   }
   if (summary.kind === "message") {
     return summary.text !== null ? (
-      <Row label={t("approval.message")} value={<UntrustedText text={summary.text} />} />
+      <>
+        <Row label={t("approval.message")} value={<UntrustedText text={summary.text} />} />
+        {summary.truncated ? <Row label={t("approval.data")} value={t("approval.bytes", { size: summary.size })} /> : null}
+      </>
     ) : (
       <Row label={t("approval.message")} value={t("approval.bytes", { size: summary.size })} />
     );
