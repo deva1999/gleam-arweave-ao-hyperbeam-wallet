@@ -196,6 +196,20 @@ export function SigningApprovalScreen({
               copyLabel={t("approval.copySigningPayloadHash")}
               value={preview.payloadHash}
             />
+
+            {preview.hashAlgorithm ? (
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-body text-muted">{t("approval.hashAlgorithm")}</span>
+                <span className="font-mono text-body text-foreground">{preview.hashAlgorithm}</span>
+              </div>
+            ) : null}
+
+            {preview.encryptLabelSize != null ? (
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-body text-muted">{t("approval.encryptLabel")}</span>
+                <span className="font-mono text-body text-foreground">{t("approval.bytes", { size: preview.encryptLabelSize })}</span>
+              </div>
+            ) : null}
           </>
         )}
 
