@@ -52,6 +52,13 @@ export function DataItemCard({
         </div>
       ) : null}
 
+      {item.anchor ? (
+        <div className="flex flex-col gap-1">
+          <span className="text-caption font-semibold uppercase tracking-wide text-muted">{t("approval.anchor")}</span>
+          <span className="break-all font-mono text-caption text-foreground">{`${item.anchor.slice(0, 8)}…`}</span>
+        </div>
+      ) : null}
+
       <div className="flex flex-col gap-1">
         <span className="text-caption font-semibold uppercase tracking-wide text-muted">{t("approval.payloadHash")}</span>
         <span className="break-all font-mono text-caption text-foreground">{item.payloadHash}</span>
