@@ -26,17 +26,24 @@ export type AoTransferMessageReading = ({ kind: "transfer" } & AoTransferMessage
  * `Quantity` exactly, since legacy aos matches them case-sensitively; a
  * HyperBEAM-hosted token lowercases keys, so a recased item still counts
  * as unreadable rather than as no transfer. A name given twice, in any
- * case, is unreadable too: a process could act on either copy.
+ * case, is unreadable too: a process could act on either copy. So is a
+ * body riding on the item (`dataSize` above zero, when the caller knows
+ * it): the L1 reader treats data on a transfer the same way, since the
+ * item the user signs carries that second payload to the token process
+ * while the transfer headline says nothing about it.
  */
 export function readAoTransferMessage(item: {
   target: string | null | undefined;
   tags: readonly Tag[];
+  /** The item's data length in bytes, when the caller has it; a transfer carrying any is unreadable. */
+  dataSize?: number;
 }): AoTransferMessageReading | null {
   if (!item.target || !ADDRESS.test(item.target)) return null;
   const looksLikeTransfer = item.tags.some(
     (tag) => tag.name.toLowerCase() === "action" && tag.value.toLowerCase() === "transfer",
   );
   if (!looksLikeTransfer) return null;
+  if (item.dataSize !== undefined && item.dataSize > 0) return { kind: "unreadable" };
   const only = (name: string): string | null => {
     const matches = item.tags.filter((tag) => tag.name === name);
     return matches.length === 1 ? matches[0]!.value : null;
