@@ -89,6 +89,21 @@ export interface SigningApprovalPreview {
   dataSize?: number;
   /** Set when `decodedData` holds only the start of longer text; `getApprovalData` returns the rest. */
   dataTruncated?: true;
+  /**
+   * The digest a `signMessage` call will use when the site picked a
+   * non-default one ("SHA-384" or "SHA-512"); `null` for the default
+   * SHA-256 and for kinds with no digest choice. The choice changes the
+   * signature bytes, so it is part of what the user is approving.
+   */
+  hashAlgorithm?: string | null;
+  /**
+   * The byte length of the RSA-OAEP label an `encrypt`/`decrypt` call
+   * will use, when the site supplied one; `null` when it supplied none.
+   * Only the size is carried, not the label itself: the label is
+   * site-chosen bytes, and its size is what tells the user one was set
+   * at all — a labelled ciphertext only opens under the same label.
+   */
+  encryptLabelSize?: number | null;
   tags: Array<{ name: string; value: string }>;
   payloadHash: string;
   /**
