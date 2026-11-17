@@ -29,15 +29,17 @@ const MESSAGE_TEXT_LIMIT = 500;
 // shown text differ from the signed bytes, so such a message shows its size.
 export const UNSAFE_TEXT = /[\p{Cc}\u202A-\u202E\u2066-\u2069]/u;
 
-function messageText(data: Uint8Array): string | null {
+function messageText(data: Uint8Array): { text: string | null; truncated: boolean } {
   let text: string;
   try {
     text = strictTextDecoder.decode(data);
   } catch {
-    return null;
+    return { text: null, truncated: false };
   }
-  if (text.length === 0 || UNSAFE_TEXT.test(text.replace(/[\t\n]/g, ""))) return null;
-  return text.length > MESSAGE_TEXT_LIMIT ? `${text.slice(0, MESSAGE_TEXT_LIMIT)}…` : text;
+  if (text.length === 0 || UNSAFE_TEXT.test(text.replace(/[\t\n]/g, ""))) return { text: null, truncated: false };
+  return text.length > MESSAGE_TEXT_LIMIT
+    ? { text: `${text.slice(0, MESSAGE_TEXT_LIMIT)}…`, truncated: true }
+    : { text, truncated: false };
 }
 
 export function decodeTransactionTag(tag: { name: string; value: string }): { name: string; value: string } {
@@ -53,7 +55,8 @@ export function decodeTransactionTag(tag: { name: string; value: string }): { na
  */
 export function summarize(payload: UnsignedPayload, collectibleId?: string | null): DeviceSigningSummary {
   if (payload.kind === "message") {
-    return { kind: "message", text: messageText(payload.data), size: payload.data.byteLength };
+    const { text, truncated } = messageText(payload.data);
+    return { kind: "message", text, size: payload.data.byteLength, ...(truncated ? { truncated: true as const } : {}) };
   }
   if (payload.kind === "transaction") {
     const { target, quantity, reward, data_size } = payload.transaction;
