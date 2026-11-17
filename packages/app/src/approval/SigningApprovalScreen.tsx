@@ -196,6 +196,13 @@ export function SigningApprovalScreen({
               copyLabel={t("approval.copySigningPayloadHash")}
               value={preview.payloadHash}
             />
+
+            {preview.lastTx ? (
+              <div className="flex flex-col gap-1.5">
+                <span className="text-caption font-semibold uppercase tracking-wide text-muted">{t("approval.lastTx")}</span>
+                <span className="break-all font-mono text-caption text-foreground">{preview.lastTx}</span>
+              </div>
+            ) : null}
           </>
         )}
 
