@@ -403,7 +403,7 @@ export function createProviderHandlers(deps: ProviderDeps): ProviderHandlers {
     // denom/ticker-only wrapper, so the flag survives.
     const itemTokenMetadata = await Promise.all(
       signed.map((item) => {
-        const transfer = readAoTransferMessage({ target: item.target, tags: item.tags });
+        const transfer = readAoTransferMessage({ target: item.target, tags: item.tags, dataSize: item.data.byteLength });
         return transfer?.kind === "transfer" && wallet ? resolveTokenPreview(wallet.address, transfer.processId) : null;
       }),
     );
