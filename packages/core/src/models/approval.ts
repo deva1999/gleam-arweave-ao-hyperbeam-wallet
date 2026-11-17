@@ -244,7 +244,13 @@ export type DeviceSigningSummary =
       unreadableTokenTransfer?: boolean;
     }
   /** `text` is the message as UTF-8, or null when it isn't valid text. */
-  | { kind: "message"; text: string | null; size: number };
+  | {
+      kind: "message";
+      text: string | null;
+      size: number;
+      /** Set when `text` holds only the start of a longer message, so the device screen can show `size` beside the truncated text. */
+      truncated?: true;
+    };
 
 /**
  * What the approval window needs to drive a hardware wallet once the user
