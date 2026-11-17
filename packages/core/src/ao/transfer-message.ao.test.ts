@@ -28,6 +28,10 @@ describe("readAoTransferMessage", () => {
     expect(readAoTransferMessage({ target: PROCESS, tags })?.kind).toBe("transfer");
   });
 
+  it("reads a transfer whose data is empty as a transfer", () => {
+    expect(readAoTransferMessage({ target: PROCESS, tags: TAGS, dataSize: 0 })?.kind).toBe("transfer");
+  });
+
   it.each([
     ["no target", { target: null, tags: TAGS }],
     ["a target that isn't an address", { target: "short", tags: TAGS }],
@@ -50,6 +54,7 @@ describe("readAoTransferMessage", () => {
     ["a lowercase action beside Action", { target: PROCESS, tags: [...TAGS, { name: "action", value: "transfer" }] }],
     ["a lowercase recipient beside Recipient", { target: PROCESS, tags: [...TAGS, { name: "recipient", value: "h".repeat(43) }] }],
     ["a lowercase quantity beside Quantity", { target: PROCESS, tags: [...TAGS, { name: "quantity", value: "1" }] }],
+    ["a data body riding on the transfer", { target: PROCESS, tags: TAGS, dataSize: 4 }],
   ])("is unreadable for %s", (_name, item) => {
     expect(readAoTransferMessage(item)).toEqual({ kind: "unreadable" });
   });
