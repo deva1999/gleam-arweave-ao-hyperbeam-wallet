@@ -824,7 +824,7 @@ async function buildDataItemPreviews(
     dataItems.map(async (item, index) => {
       const bytes = base64ToBytes(item.data);
       const tags = item.tags ?? [];
-      const transfer = readAoTransferMessage({ target: item.target, tags });
+      const transfer = readAoTransferMessage({ target: item.target, tags, dataSize: bytes.byteLength });
       const metadata = tokenMetadata?.[index] ?? null;
       // A collectible's transfer of 1 shows as that collectible, as the
       // L1 path already does, not as 1 raw unit of an unknown token.
