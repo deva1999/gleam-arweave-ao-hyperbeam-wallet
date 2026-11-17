@@ -837,6 +837,7 @@ async function buildDataItemPreviews(
         dataSize: bytes.byteLength,
         tags,
         target: item.target ?? null,
+        anchor: item.anchor ?? null,
         payloadHash: await sha256Hex(bytes),
         transfer:
           transfer?.kind === "transfer"
@@ -872,6 +873,7 @@ async function buildSigningPreview(input: SigningRequestInput): Promise<SigningA
     token: input.token ?? null,
     tokenDenomination: input.tokenDenomination ?? null,
     tokenTicker: input.tokenTicker ?? null,
+    lastTx: input.last_tx ?? null,
     ...(input.collectible ? { collectible: input.collectible } : {}),
     ...(input.unreadableTokenTransfer ? { unreadableTokenTransfer: true } : {}),
     ...dataPreview(input.payload),
