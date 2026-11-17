@@ -55,6 +55,8 @@ export interface SignedPart {
 
 export interface OtherItem extends SignedPart {
   target: string | null;
+  /** The item's signed `anchor`, as `SigningApprovalPreview`'s item field; `null` when it carries none. */
+  anchor?: string | null;
   payloadHash: string;
   /** This item is the token transfer the wallet couldn't read. */
   unreadableTokenTransfer?: boolean;
@@ -153,6 +155,7 @@ export function transferRequestFromPreview(preview: SigningApprovalPreview): Tra
         others.push({
           ...part,
           target: item.target,
+          anchor: item.anchor ?? null,
           payloadHash: item.payloadHash,
           index,
           ...(item.unreadableTokenTransfer ? { unreadableTokenTransfer: true } : {}),
